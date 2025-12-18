@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Acids, Bases & Indicators – Interactive Simulation</title>
+<style>
+body{font-family:Arial;background:#f4f6f9;margin:0}
+.container{max-width:1150px;margin:auto;padding:20px}
+h1{text-align:center;margin-bottom:6px}
+.main{display:flex;gap:20px}
+.ph-scale{width:120px;border:1px solid #ccc;background:#fff}
+.ph-row{height:30px;display:flex;align-items:center;padding-left:6px;font-size:12px}
+.panel{flex:1;background:#fff;padding:20px;border:1px solid #ccc}
+.solution{height:140px;border:2px solid #333;margin-bottom:10px}
+.definitions{margin-bottom:12px;font-size:14px}
+.controls label{font-weight:bold}
+.controls select,input,button{margin:6px 0;width:100%}
+.examples button{width:auto;margin:4px 4px 4px 0;padding:4px 8px}
+.game{margin-top:15px;padding:10px;border:1px dashed #aaa}
+footer{text-align:center;font-size:13px;margin-top:20px;color:#555}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Acids, Bases & Indicators – Interactive Simulation</h1>
+
+<div class="definitions">
+<b>Acid:</b> Substances which produce H<sup>+</sup> ions in aqueous solution and have pH less than 7.<br>
+<b>Base:</b> Substances which produce OH<sup>−</sup> ions in aqueous solution and have pH greater than 7.<br>
+<b>Indicator:</b> Substances that change colour in acidic or basic medium and help us identify acids and bases.
+</div>
+
+<div class="main">
+
+<!-- pH SCALE -->
+<div class="ph-scale">
+<div class="ph-row" style="background:#8B0000;color:#fff">pH 0</div>
+<div class="ph-row" style="background:#B22222;color:#fff">pH 1</div>
+<div class="ph-row" style="background:#FF4500">pH 2</div>
+<div class="ph-row" style="background:#FF8C00">pH 3</div>
+<div class="ph-row" style="background:#FFD700">pH 4</div>
+<div class="ph-row" style="background:#FFFF00">pH 5</div>
+<div class="ph-row" style="background:#9ACD32">pH 6</div>
+<div class="ph-row" style="background:#008000;color:#fff">pH 7</div>
+<div class="ph-row" style="background:#66CDAA">pH 8</div>
+<div class="ph-row" style="background:#00BFFF">pH 9</div>
+<div class="ph-row" style="background:#0000FF;color:#fff">pH 10</div>
+<div class="ph-row" style="background:#00008B;color:#fff">pH 11</div>
+<div class="ph-row" style="background:#4B0082;color:#fff">pH 12</div>
+<div class="ph-row" style="background:#800080;color:#fff">pH 13</div>
+<div class="ph-row" style="background:#4B0082;color:#fff">pH 14</div>
+</div>
+
+<!-- MAIN PANEL -->
+<div class="panel">
+<div class="solution" id="solution"></div>
+<div id="info">pH = 7 | Universal Indicator | Green (Neutral)</div>
+
+<div class="controls">
+<label>pH Value</label>
+<input type="range" min="0" max="14" step="1" value="7" oninput="updatePH(this.value)">
+
+<label>Indicator</label>
+<select id="indicator" onchange="updatePH(ph)">
+<option value="universal">Universal Indicator</option>
+<option value="litmus">Litmus</option>
+<option value="phenol">Phenolphthalein</option>
+<option value="turmeric">Turmeric</option>
+</select>
+</div>
+
+<div class="examples">
+<b>Daily-life substances (approximate pH):</b><br>
+<button onclick="setExample(2)">Lemon juice (2)</button>
+<button onclick="setExample(3)">Vinegar (3)</button>
+<button onclick="setExample(6)">Milk (6)</button>
+<button onclick="setExample(7)">Water (7)</button>
+<button onclick="setExample(8)">Baking soda (8)</button>
+<button onclick="setExample(10)">Soap solution (10)</button>
+<button onclick="setExample(12)">Washing soda (12)</button>
+</div>
+
+<div class="game">
+<b>Mini Game:</b> Guess the nature of solution<br>
+<button onclick="check('acid')">Acid</button>
+<button onclick="check('neutral')">Neutral</button>
+<button onclick="check('base')">Base</button>
+<p id="gameResult"></p>
+</div>
+
+</div>
+</div>
+
+<footer>
+Prepared by <b>Chetan Sharma</b> | Science Master, GSSS Harike
+</footer>
+</div>
+
+<script>
+let ph=7;
+const uni={
+0:["#8B0000","Dark Red"],1:["#B22222","Red"],2:["#FF4500","Red-Orange"],3:["#FF8C00","Orange"],
+4:["#FFD700","Yellow-Orange"],5:["#FFFF00","Yellow"],6:["#9ACD32","Yellow-Green"],
+7:["#008000","Green (Neutral)"],8:["#66CDAA","Green-Blue"],9:["#00BFFF","Sky Blue"],
+10:["#0000FF","Blue"],11:["#00008B","Dark Blue"],12:["#4B0082","Indigo"],
+13:["#800080","Violet"],14:["#4B0082","Dark Purple"]
+};
+
+function updatePH(val){
+ph=Number(val);
+let ind=document.getElementById("indicator").value;
+let color="#fff",text="";
+if(ind==="universal"){color=uni[ph][0];text=uni[ph][1];}
+if(ind==="litmus"){
+if(ph<7){color="red";text="Red (Acid)";}
+else if(ph>7){color="blue";text="Blue (Base)";}
+else{color="purple";text="No Change";}
+}
+if(ind==="phenol"){
+if(ph>7){color="pink";text="Pink (Base)";}
+else{color="transparent";text="Colourless";}
+}
+if(ind==="turmeric"){
+if(ph>7){color="brown";text="Reddish Brown (Base)";}
+else{color="yellow";text="Yellow";}
+}
+document.getElementById("solution").style.background=color;
+document.getElementById("info").innerText="pH = "+ph+" | "+document.getElementById("indicator").selectedOptions[0].text+" | "+text;
+document.getElementById("gameResult").innerText="";
+}
+
+function setExample(val){
+document.querySelector("input[type=range]").value=val;
+updatePH(val);
+}
+
+function check(ans){
+let correct=ph<7?"acid":ph==7?"neutral":"base";
+document.getElementById("gameResult").innerText=
+(ans===correct)?"Correct! Well done.":"Incorrect, try again.";
+}
+
+updatePH(7);
+</script>
+
+</body>
+</html>
